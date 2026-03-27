@@ -2,9 +2,10 @@
 
 ## 结论（基于代码证据）
 
-- **当前实现使用 FRED API v1**（base URL 固定为 `https://api.stlouisfed.org/fred`）。
-- **FRED API v2 未实现**（官方 v2 端点为 `fred/v2/release/observations`，仓库内无对应调用）。
-- **官方 API 未全覆盖**：仅覆盖 v1 的部分 Categories / Releases / Series / Sources 端点；Tags 与 Maps API 未实现；Releases / Series 亦缺多个子端点。
+- **当前实现支持 FRED API v1 + GeoFRED（Maps API）+ FRED API v2**。
+- **官方文档中列出的 v1 大类端点已全覆盖**：Categories / Releases / Series / Sources / Tags。
+- **GeoFRED（Maps API）文档端点已覆盖**：`shapes`、`series/group`、`regional/data`。
+- **FRED API v2 文档端点已覆盖**：`fred/v2/release/observations`。
 
 ### 证据索引（关键文件）
 
@@ -31,39 +32,39 @@
 | Categories | `category` | ✅ | 根/详情浏览（本项目：无 `category_id` 时请求 `category`） |
 | Categories | `category/children` | ✅ | 传 `category_id` 时请求 children |
 | Categories | `category/series` | ✅ | category_series 能力 |
-| Categories | `category/related` | ❌ | 未实现 |
-| Categories | `category/tags` | ❌ | 未实现 |
-| Categories | `category/related_tags` | ❌ | 未实现 |
+| Categories | `category/related` | ✅ | 全量端点工具已实现 |
+| Categories | `category/tags` | ✅ | 全量端点工具已实现 |
+| Categories | `category/related_tags` | ✅ | 全量端点工具已实现 |
 | Releases | `releases` | ✅ | releases 列表 |
 | Releases | `release/series` | ✅ | release_series 能力 |
-| Releases | `release` | ❌ | 未实现 |
-| Releases | `releases/dates` | ❌ | 未实现 |
-| Releases | `release/dates` | ❌ | 未实现 |
-| Releases | `release/sources` | ❌ | 未实现 |
-| Releases | `release/tags` | ❌ | 未实现 |
-| Releases | `release/related_tags` | ❌ | 未实现 |
-| Releases | `release/tables` | ❌ | 未实现 |
+| Releases | `release` | ✅ | 全量端点工具已实现 |
+| Releases | `releases/dates` | ✅ | 全量端点工具已实现 |
+| Releases | `release/dates` | ✅ | 全量端点工具已实现 |
+| Releases | `release/sources` | ✅ | 全量端点工具已实现 |
+| Releases | `release/tags` | ✅ | 全量端点工具已实现 |
+| Releases | `release/related_tags` | ✅ | 全量端点工具已实现 |
+| Releases | `release/tables` | ✅ | 全量端点工具已实现 |
 | Series | `series/search` | ✅ | fred_search |
 | Series | `series` | ✅ | getSeriesInfo（用于补充元信息） |
 | Series | `series/observations` | ✅ | fred_get_series（核心数据） |
-| Series | `series/categories` | ❌ | 未实现 |
-| Series | `series/release` | ❌ | 未实现 |
-| Series | `series/tags` | ❌ | 未实现 |
-| Series | `series/updates` | ❌ | 未实现 |
-| Series | `series/vintagedates` | ❌ | 未实现 |
+| Series | `series/categories` | ✅ | 全量端点工具已实现 |
+| Series | `series/release` | ✅ | 全量端点工具已实现 |
+| Series | `series/tags` | ✅ | 全量端点工具已实现 |
+| Series | `series/updates` | ✅ | 全量端点工具已实现 |
+| Series | `series/vintagedates` | ✅ | 全量端点工具已实现 |
 | Sources | `sources` | ✅ | sources 列表 |
-| Sources | `source` | ❌ | 未实现 |
-| Sources | `source/releases` | ❌ | 未实现 |
-| Tags | `tags` | ❌ | 未实现（注意：fred_search 支持在 series/search 里用 tag_names 过滤，但不是 tags 端点） |
-| Tags | `related_tags` | ❌ | 未实现 |
-| Tags | `tags/series` | ❌ | 未实现 |
-| Maps API | maps 相关端点 | ❌ | 未实现 |
+| Sources | `source` | ✅ | 全量端点工具已实现 |
+| Sources | `source/releases` | ✅ | 全量端点工具已实现 |
+| Tags | `tags` | ✅ | 全量端点工具已实现 |
+| Tags | `related_tags` | ✅ | 全量端点工具已实现 |
+| Tags | `tags/series` | ✅ | 全量端点工具已实现 |
+| Maps API | maps 相关端点 | ✅ | 通过 GeoFRED tools 覆盖（见下方） |
 
 ## FRED API v2 覆盖
 
 | 官方 v2 端点 | 当前实现 |
 |---|---:|
-| `fred/v2/release/observations` | ❌ |
+| `fred/v2/release/observations` | ✅ |
 
 ## Debug 迭代计划（补齐覆盖面）
 
@@ -106,10 +107,10 @@
 
 ### 迭代 1（优先级 P0：让覆盖更“可用”）
 
-- [ ] 新增 `fred_tags` 工具：封装 `tags` / `related_tags` / `tags/series`
-- [ ] 新增 `fred_release_observations_v2` 工具：封装 `fred/v2/release/observations`
-- [ ] 新增 `fred_release_dates` 工具：封装 `releases/dates` 与 `release/dates`
-- [ ] 新增 `fred_series_meta` 工具：封装 `series/categories`、`series/release`、`series/tags`
+- [x] 新增 `fred_tags` 工具：封装 `tags` / `related_tags` / `tags/series`
+- [x] 新增 `fred_release_observations_v2` 工具：封装 `fred/v2/release/observations`
+- [x] 新增 `fred_release_dates` 工具：封装 `releases/dates` 与 `release/dates`
+- [x] 新增 `fred_series_meta` 工具：封装 `series/categories`、`series/release`、`series/tags`
 
 **验收（Checkfix）**
 
@@ -119,12 +120,12 @@
 
 ### 迭代 2（P1：补齐 browsing/metadata）
 
-- [ ] `source`、`source/releases` 支持
-- [ ] `category/related`、`category/tags`、`category/related_tags` 支持
-- [ ] `release/sources`、`release/tags`、`release/related_tags`、`release/tables` 支持
+- [x] `source`、`source/releases` 支持
+- [x] `category/related`、`category/tags`、`category/related_tags` 支持
+- [x] `release/sources`、`release/tags`、`release/related_tags`、`release/tables` 支持
 
 ### 迭代 3（P2：高级能力）
 
-- [ ] `series/updates`、`series/vintagedates`
-- [ ] Maps API（如需要）
+- [x] `series/updates`、`series/vintagedates`
+- [x] Maps API（如需要）
 
