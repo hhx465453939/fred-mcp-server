@@ -5,6 +5,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import * as fredServer from "./index.js";
+import { pathToFileURL } from "url";
 
 /**
  * Wrapper class for the FRED MCP Server
@@ -82,7 +83,10 @@ async function main() {
 }
 
 // Only run the main function if this file is executed directly
-if (import.meta.url === `file://${process.argv[1]}`) {
+const isExecutedDirectly =
+  typeof process.argv[1] === "string" && import.meta.url === pathToFileURL(process.argv[1]).href;
+
+if (isExecutedDirectly) {
   main().catch((error) => {
     console.error("Fatal error in main():", error);
     process.exit(1);

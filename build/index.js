@@ -5,7 +5,7 @@ import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/
 import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js";
 import { registerFREDTools } from "./fred/tools.js";
 import { readFileSync } from "fs";
-import { fileURLToPath } from "url";
+import { fileURLToPath, pathToFileURL } from "url";
 import { dirname, join } from "path";
 import { randomUUID } from "crypto";
 import express from "express";
@@ -175,7 +175,8 @@ async function main() {
     }
 }
 export const TESTING_DISABLED_AUTO_START = false;
-if (import.meta.url === `file://${process.argv[1]}` && !TESTING_DISABLED_AUTO_START) {
+const isExecutedDirectly = typeof process.argv[1] === "string" && import.meta.url === pathToFileURL(process.argv[1]).href;
+if (isExecutedDirectly && !TESTING_DISABLED_AUTO_START) {
     main().catch((error) => {
         console.error("Fatal error in main():", error);
         process.exit(1);

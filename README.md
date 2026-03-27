@@ -86,6 +86,27 @@ Install the server, for example, on [Claude Desktop](https://claude.ai/download)
 }
 ```
 
+### Local MCP config (Cursor/Windsurf-style)
+
+If your MCP client uses a per-server object with `name`, `type`, `isActive`, `command`, `args`, and `env`, you can use:
+
+```json
+{
+  "mcpServers": {
+    "fred-mcp-server": {
+      "name": "fred-mcp-server",
+      "type": "stdio",
+      "isActive": true,
+      "command": "node",
+      "args": ["<PATH_TO_YOUR_CLONED_REPO>/fred-mcp-server/build/index.js"],
+      "env": {
+        "FRED_API_KEY": "YOUR_API_KEY_HERE"
+      }
+    }
+  }
+}
+```
+
 ### Using Docker
 
 You can also run the FRED MCP Server using Docker. Add this configuration to your `claude_desktop_config.json`:
