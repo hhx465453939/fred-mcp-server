@@ -1,12 +1,11 @@
 import { z } from "zod";
-const BASE_URL = "https://api.stlouisfed.org/fred";
-/**
- * Utility for making requests to the FRED API
- */
-export const makeRequest = async (endpoint, queryParams = {}) => {
+const BASE_URL_FRED_V1 = "https://api.stlouisfed.org/fred";
+const BASE_URL_FRED_V2 = "https://api.stlouisfed.org/fred/v2";
+const BASE_URL_GEOFRED = "https://api.stlouisfed.org/geofred";
+async function makeRequestAtBase(baseUrl, endpoint, queryParams = {}) {
     // For development, use a demo API key if none is provided in environment
     const apiKey = process.env.FRED_API_KEY || "abcdefghijklmnopqrstuvwxyz123456";
-    const url = new URL(`${BASE_URL}/${endpoint}`);
+    const url = new URL(`${baseUrl}/${endpoint}`);
     // Add all query parameters
     Object.entries(queryParams).forEach(([key, value]) => {
         url.searchParams.append(key, String(value));
@@ -15,10 +14,12 @@ export const makeRequest = async (endpoint, queryParams = {}) => {
     url.searchParams.append("api_key", apiKey);
     // Add common parameters
     url.searchParams.append("file_type", "json");
-    console.error(`Fetching FRED API: ${url.toString().replace(/api_key=[^&]+/, "api_key=***")}`);
+    console.error(`Fetching FRED API: ${url
+        .toString()
+        .replace(/api_key=[^&]+/, "api_key=***")}`);
     const response = await fetch(url.toString(), {
         headers: {
-            "Accept": "application/json",
+            Accept: "application/json",
         },
     });
     if (!response.ok) {
@@ -26,6 +27,28 @@ export const makeRequest = async (endpoint, queryParams = {}) => {
         throw new Error(`FRED API error (${response.status}): ${errorText}`);
     }
     return response.json();
+}
+/**
+ * Utility for making requests to the FRED API
+ */
+export const makeRequest = async (endpoint, queryParams = {}) => {
+    return makeRequestAtBase(BASE_URL_FRED_V1, endpoint, queryParams);
+};
+/**
+ * Utility for making requests to the FRED API v2
+ *
+ * Endpoint is relative to https://api.stlouisfed.org/fred/v2
+ */
+export const makeRequestV2 = async (endpoint, queryParams = {}) => {
+    return makeRequestAtBase(BASE_URL_FRED_V2, endpoint, queryParams);
+};
+/**
+ * Utility for making requests to the GeoFRED (Maps) API
+ *
+ * Endpoint is relative to https://api.stlouisfed.org/geofred
+ */
+export const makeRequestGeoFred = async (endpoint, queryParams = {}) => {
+    return makeRequestAtBase(BASE_URL_GEOFRED, endpoint, queryParams);
 };
 // Observation schema for the series/observations endpoint
 export const ObservationSchema = z.object({

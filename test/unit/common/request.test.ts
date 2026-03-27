@@ -1,5 +1,5 @@
 import { describe, expect, test, jest, beforeEach, afterEach } from '@jest/globals';
-import { makeRequest, fetchFREDSeriesData } from '../../../src/common/request.js';
+import { makeRequest, makeRequestGeoFred, makeRequestV2, fetchFREDSeriesData } from '../../../src/common/request.js';
 
 describe('Request module', () => {
   // Store the original fetch
@@ -46,6 +46,45 @@ describe('Request module', () => {
       expect(url).toContain('file_type=json');
     } finally {
       // Restore the environment variable
+      process.env.FRED_API_KEY = oldApiKey;
+    }
+  });
+
+  test('makeRequestV2 constructs correct URL with parameters', async () => {
+    const oldApiKey = process.env.FRED_API_KEY;
+    process.env.FRED_API_KEY = 'test-api-key';
+
+    try {
+      await makeRequestV2('release/observations', { release_id: 10, limit: 5 });
+
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      const url = (global.fetch as jest.Mock).mock.calls[0][0];
+
+      expect(url).toContain('https://api.stlouisfed.org/fred/v2/release/observations');
+      expect(url).toContain('release_id=10');
+      expect(url).toContain('limit=5');
+      expect(url).toContain('api_key=test-api-key');
+      expect(url).toContain('file_type=json');
+    } finally {
+      process.env.FRED_API_KEY = oldApiKey;
+    }
+  });
+
+  test('makeRequestGeoFred constructs correct URL with parameters', async () => {
+    const oldApiKey = process.env.FRED_API_KEY;
+    process.env.FRED_API_KEY = 'test-api-key';
+
+    try {
+      await makeRequestGeoFred('shapes', { shape: 'state' });
+
+      expect(global.fetch).toHaveBeenCalledTimes(1);
+      const url = (global.fetch as jest.Mock).mock.calls[0][0];
+
+      expect(url).toContain('https://api.stlouisfed.org/geofred/shapes');
+      expect(url).toContain('shape=state');
+      expect(url).toContain('api_key=test-api-key');
+      expect(url).toContain('file_type=json');
+    } finally {
       process.env.FRED_API_KEY = oldApiKey;
     }
   });

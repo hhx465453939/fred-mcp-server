@@ -90,6 +90,20 @@
   - 预期输出包含：`FRED MCP Server starting...` 与 `FRED MCP Server running on stdio`
   - 若进程立刻退出，优先检查 “是否直接执行判断（Windows 兼容）”。
 
+## 覆盖补齐完成记录（v1 + GeoFRED + v2）
+
+### 已实现（代码层）
+
+- **FRED API v1**：Categories / Releases / Series / Sources / Tags **全量端点工具**已实现（见 `src/fred/*.api.ts` 与 `src/fred/tools.ts` 新增 tool 注册）
+- **GeoFRED（Maps API）**：`shapes` / `series/group` / `regional/data` 已实现（见 `src/fred/maps.api.ts`）
+- **FRED API v2**：`fred/v2/release/observations` 已实现（见 `src/fred/v2.api.ts`）
+
+### 验证（Checkfix）
+
+- `pnpm build` ✅
+- `pnpm lint` ✅
+- Jest（Windows 直跑）✅：`node --experimental-vm-modules --no-warnings ./node_modules/jest/bin/jest.js`
+
 ### 迭代 1（优先级 P0：让覆盖更“可用”）
 
 - [ ] 新增 `fred_tags` 工具：封装 `tags` / `related_tags` / `tags/series`

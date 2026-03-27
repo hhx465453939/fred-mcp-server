@@ -64,7 +64,8 @@
         "api-reference/overview",
         "api-reference/fred-browse",
         "api-reference/fred-search",
-        "api-reference/fred-get-series"
+        "api-reference/fred-get-series",
+        "api-reference/fred-endpoints"
       ]
     },
     {

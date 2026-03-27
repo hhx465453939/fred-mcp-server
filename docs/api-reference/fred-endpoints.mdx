@@ -1,0 +1,81 @@
+---
+title: Full Endpoint Tools
+description: One-to-one MCP tools for the official FRED API (v1), GeoFRED (Maps), and FRED API v2
+icon: 'code'
+---
+
+# Full Endpoint Tools
+
+In addition to the 3 “core” tools (`fred_browse`, `fred_search`, `fred_get_series`), this server also exposes **one-to-one MCP tools** that map directly to the official St. Louis Fed Web Services endpoints:
+
+- **FRED API v1**: `https://api.stlouisfed.org/fred/...` ([official docs](https://fred.stlouisfed.org/docs/api/fred/))
+- **GeoFRED (Maps API)**: `https://api.stlouisfed.org/geofred/...` ([official docs](https://fred.stlouisfed.org/docs/api/geofred/))
+- **FRED API v2**: `https://api.stlouisfed.org/fred/v2/...` ([official docs](https://fred.stlouisfed.org/docs/api/fred/v2/index.html))
+
+## How parameters work
+
+Most tools follow this pattern:
+
+- A required identifier (e.g. `series_id`, `release_id`, `source_id`, `category_id`)
+- An optional `params` object for passing **any additional official query parameters** through to the underlying endpoint
+
+This makes the tools future-proof and keeps the MCP schemas stable while still supporting the full official parameter surface.
+
+## FRED API v1 tools (complete coverage)
+
+### Categories
+
+- `fred_category_get` → `fred/category`
+- `fred_category_children` → `fred/category/children`
+- `fred_category_related` → `fred/category/related`
+- `fred_category_series` → `fred/category/series`
+- `fred_category_tags` → `fred/category/tags`
+- `fred_category_related_tags` → `fred/category/related_tags`
+
+### Releases
+
+- `fred_releases` → `fred/releases`
+- `fred_releases_dates` → `fred/releases/dates`
+- `fred_release` → `fred/release`
+- `fred_release_dates` → `fred/release/dates`
+- `fred_release_series` → `fred/release/series`
+- `fred_release_sources` → `fred/release/sources`
+- `fred_release_tags` → `fred/release/tags`
+- `fred_release_related_tags` → `fred/release/related_tags`
+- `fred_release_tables` → `fred/release/tables`
+
+### Series
+
+- `fred_series` → `fred/series`
+- `fred_series_categories` → `fred/series/categories`
+- `fred_series_observations` → `fred/series/observations`
+- `fred_series_release` → `fred/series/release`
+- `fred_series_search` → `fred/series/search`
+- `fred_series_search_tags` → `fred/series/search/tags`
+- `fred_series_search_related_tags` → `fred/series/search/related_tags`
+- `fred_series_tags` → `fred/series/tags`
+- `fred_series_updates` → `fred/series/updates`
+- `fred_series_vintagedates` → `fred/series/vintagedates`
+
+### Sources
+
+- `fred_sources` → `fred/sources`
+- `fred_source` → `fred/source`
+- `fred_source_releases` → `fred/source/releases`
+
+### Tags
+
+- `fred_tags` → `fred/tags`
+- `fred_related_tags` → `fred/related_tags`
+- `fred_tags_series` → `fred/tags/series`
+
+## GeoFRED (Maps API) tools
+
+- `geofred_shapes` → `geofred/shapes`
+- `geofred_series_group` → `geofred/series/group`
+- `geofred_regional_data` → `geofred/regional/data`
+
+## FRED API v2 tools
+
+- `fred_v2_release_observations` → `fred/v2/release/observations`
+

@@ -25,12 +25,12 @@ describe('FRED tools module', () => {
       expect(typeof registerFREDTools).toBe('function');
     });
     
-    test('registers all three tools with the server', () => {
+    test('registers core tools plus full-coverage tools', () => {
       const mockServer = createMockServer();
       registerFREDTools(mockServer as any);
       
-      // Verify server.tool was called three times
-      expect(mockServer.tool).toHaveBeenCalledTimes(3);
+      // Should register the original 3 tools plus the full coverage set
+      expect(mockServer.tool.mock.calls.length).toBeGreaterThan(3);
       
       // Get the registered tools
       const toolCalls = mockServer.tool.mock.calls;
@@ -40,6 +40,14 @@ describe('FRED tools module', () => {
       expect(toolNames).toContain('fred_browse');
       expect(toolNames).toContain('fred_search');
       expect(toolNames).toContain('fred_get_series');
+
+      // Spot-check a few full coverage tools exist
+      expect(toolNames).toContain('fred_category_related');
+      expect(toolNames).toContain('fred_releases_dates');
+      expect(toolNames).toContain('fred_series_updates');
+      expect(toolNames).toContain('fred_tags');
+      expect(toolNames).toContain('geofred_shapes');
+      expect(toolNames).toContain('fred_v2_release_observations');
     });
     
     test('fred_browse tool has correct schema', () => {

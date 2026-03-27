@@ -221,6 +221,16 @@ This MCP server provides three comprehensive tools to access all 800,000+ FRED®
 * `frequency` (optional): Frequency aggregation ("d", "w", "m", "q", "a")
 * `aggregation_method` (optional): "avg" (average), "sum", or "eop" (end of period)
 
+### Full endpoint tools (FRED v1 + GeoFRED + FRED v2)
+
+If you prefer **1:1 mapping to the official endpoints**, the server also exposes additional tools that mirror:
+
+- **FRED API v1** (`https://api.stlouisfed.org/fred/...`) — example: `fred_release_tables`, `fred_series_updates`, `fred_tags`
+- **GeoFRED (Maps API)** (`https://api.stlouisfed.org/geofred/...`) — example: `geofred_shapes`, `geofred_regional_data`
+- **FRED API v2** (`https://api.stlouisfed.org/fred/v2/...`) — example: `fred_v2_release_observations`
+
+See `docs/api-reference/fred-endpoints.mdx` for the full list.
+
 ## Example Usage
 
 With these three tools, you can:
